@@ -7,7 +7,6 @@ import {
 import { PieChart as PieIcon, BarChart3, Building2, GraduationCap, Layers, Percent } from "lucide-react";
 
 const GOLD = "#ff6b47";
-const GOLD_DIM = "rgba(255,107,71,0.35)";
 const BLUE = "#a78bfa";
 const GREEN = "#4ade80";
 const SLATE = "#332f3c";

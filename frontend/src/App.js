@@ -87,7 +87,6 @@ export default function SeatingArrangementApp() {
   const [previewDepts, setPreviewDepts] = useState({});
   const [selectedRooms, setSelectedRooms] = useState({});
   const [selectedDepts, setSelectedDepts] = useState({});
-  const [previewRoomTab, setPreviewRoomTab] = useState(0);
   const [activeDeptYear, setActiveDeptYear] = useState("1st Year");
 
   // Forgot password state
@@ -145,13 +144,6 @@ export default function SeatingArrangementApp() {
       setPreviewLoading(false);
     }
   };
-
-  const buildFilteredFiles = useCallback(async () => {
-    // Build filtered room excel blob
-    const XLSX = await import("https://cdn.sheetjs.com/xlsx-0.20.0/package/xlsx.mjs").catch(() => null);
-    // We'll pass selections via form fields instead; backend will filter
-    return null;
-  }, []);
 
   const buildFormData = useCallback(() => {
     const fd = new FormData();
@@ -470,7 +462,7 @@ export default function SeatingArrangementApp() {
     spinner: { width: 52, height: 52, border: "3px solid #2a2732", borderTop: "3px solid #ff6b47", borderRadius: "50%", animation: "spin 0.9s linear infinite", marginBottom: 22 },
     resultCard: { maxWidth: 880, width: "92%", marginTop: 32, background: "linear-gradient(145deg, #18151d 0%, #1d1824 100%)", border: "1px solid #2e2a38", borderRadius: 12, padding: "36px 40px", boxShadow: "0 8px 40px rgba(0,0,0,0.5)" },
     tabBar: { display: "flex", borderBottom: "1px solid #2e2a38", marginBottom: 20 },
-    tab: (active) => ({ padding: "10px 24px", fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", color: active ? "#ff6b47" : "#4a4454", borderBottom: active ? "2px solid #ff6b47" : "2px solid transparent", cursor: "pointer", background: "transparent", border: "none", borderBottom: active ? "2px solid #ff6b47" : "2px solid transparent", fontFamily: FONT_UI }),
+    tab: (active) => ({ padding: "10px 24px", fontSize: "0.72rem", letterSpacing: "0.15em", textTransform: "uppercase", color: active ? "#ff6b47" : "#4a4454", cursor: "pointer", background: "transparent", border: "none", borderBottom: active ? "2px solid #ff6b47" : "2px solid transparent", fontFamily: FONT_UI }),
     table: { width: "100%", borderCollapse: "collapse", fontSize: "0.82rem" },
     th: { padding: "11px 14px", textAlign: "left", fontSize: "0.65rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#ff6b47", borderBottom: "1px solid #2e2a38", fontFamily: FONT_UI, fontWeight: "normal" },
     td: (i) => ({ padding: "10px 14px", borderBottom: "1px solid rgba(38,34,46,0.5)", color: "#e5e1ea", background: i % 2 === 0 ? "rgba(16,14,20,0.4)" : "transparent" }),
