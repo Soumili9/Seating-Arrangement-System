@@ -1,0 +1,10 @@
+# python backend
+__pycache__/
+*.pyc
+venv/
+.env
+static_build/
+
+# frontend (redundant safety net — frontend/.gitignore already covers this)
+frontend/node_modules/
+frontend/build/
