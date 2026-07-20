@@ -4,7 +4,7 @@ import { Toaster, toast } from "sonner";
 import {
   Lock, FolderUp, Settings2, ClipboardList, Check, CheckCircle2, AlertTriangle,
   ArrowLeft, ArrowRight, Download, X, FileSpreadsheet, Building2, Eye, EyeOff, Table2,
-  BarChart3, Settings, LogOut, Info,
+  BarChart3, Settings, LogOut, Info, Copy,
 } from "lucide-react";
 import LandingPage from "./components/LandingPage";
 import ResultsTable from "./components/ResultsTable";
@@ -14,11 +14,15 @@ import SettingsModal from "./components/SettingsModal";
 
 const STEPS = ["Authentication", "Upload Files", "Configuration", "Results"];
 const stepIconList = [Lock, FolderUp, Settings2, ClipboardList];
-// In production (Vercel), set REACT_APP_API_URL to your Render backend URL, e.g.
-// REACT_APP_API_URL=https://your-app.onrender.com/api
+
 const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 const FONT_UI = "'Inter', 'Segoe UI', sans-serif";
 const FONT_HEAD = "'Poppins', 'Inter', 'Segoe UI', sans-serif";
+
+// Portfolio/demo mode: shows a credentials hint on the login screen.
+const SHOW_DEMO_HINT = true;
+const DEMO_USERNAME = "demo";
+const DEMO_PASSWORD = "demo123";
 
 function Spinner({ size = 14, color = "#0a0a0d", reducedMotion = false }) {
   if (reducedMotion) {
@@ -622,9 +626,26 @@ export default function SeatingArrangementApp() {
           <div style={s.seal}><Lock size={20} /></div>
           <div style={{ ...s.cardTitle, textAlign: "center", fontSize: "1.15rem" }}>Step 1: Authentication</div>
           <div style={s.divider} />
-          <div style={{ fontSize: "0.72rem", color: "#9691a0", letterSpacing: "0.12em", marginBottom: 26, lineHeight: 1.7 }}>
+          <div style={{ fontSize: "0.72rem", color: "#9691a0", letterSpacing: "0.12em", marginBottom: 18, lineHeight: 1.7 }}>
             Access is restricted to authorised COE office personnel only.
           </div>
+          {SHOW_DEMO_HINT && (
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, background: "rgba(255,107,71,0.06)", border: "1px dashed #ff6b47", borderRadius: 10, padding: "10px 14px", marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                <Info size={14} color="#ff6b47" style={{ marginTop: 2, flexShrink: 0 }} />
+                <div style={{ fontSize: "0.68rem", color: "#a8a3b0", lineHeight: 1.6 }}>
+                  Portfolio demo: <span style={{ color: "#f5f3f7" }}>{DEMO_USERNAME}</span> / <span style={{ color: "#f5f3f7" }}>{DEMO_PASSWORD}</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setAuth((a) => ({ ...a, username: DEMO_USERNAME, password: DEMO_PASSWORD }))}
+                title="Fill in demo credentials"
+                style={{ background: "none", border: "1px solid #ff6b47", color: "#ff6b47", borderRadius: 8, width: 28, height: 28, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+              >
+                <Copy size={12} />
+              </button>
+            </div>
+          )}
           <span style={s.sectionLabel}>Username</span>
           <input style={{ ...s.input, marginBottom: 22 }} type="text" placeholder="Enter username" value={auth.username} disabled={auth.attempts >= 3} onChange={(e) => setAuth((a) => ({ ...a, username: e.target.value }))} onKeyDown={(e) => e.key === "Enter" && handleAuthenticate()} />
           <span style={s.sectionLabel}>Password</span>
