@@ -50,10 +50,16 @@ export to Excel.
 ├── app.py                  # Flask backend / allocation API
 ├── requirements.txt        # Python dependencies
 ├── Procfile                 # Render start command
-├── sample_department_data.xlsx
-├── sample_room_data.xlsx
 └── frontend/                # React application
     ├── public/
+    │   ├── favicon.ico
+    │   ├── index.html
+    │   ├── logo192.png
+    │   ├── logo512.png
+    │   ├── manifest.json
+    │   ├── robots.txt
+    │   ├── sample_department_data.xlsx
+    │   └── sample_room_data.xlsx
     └── src/
         ├── App.js
         └── components/
