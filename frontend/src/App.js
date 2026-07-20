@@ -14,12 +14,16 @@ import SettingsModal from "./components/SettingsModal";
 
 const STEPS = ["Authentication", "Upload Files", "Configuration", "Results"];
 const stepIconList = [Lock, FolderUp, Settings2, ClipboardList];
-
+// In production (Vercel), set REACT_APP_API_URL to your Render backend URL, e.g.
+// REACT_APP_API_URL=https://your-app.onrender.com/api
 const API = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 const FONT_UI = "'Inter', 'Segoe UI', sans-serif";
 const FONT_HEAD = "'Poppins', 'Inter', 'Segoe UI', sans-serif";
 
 // Portfolio/demo mode: shows a credentials hint on the login screen.
+// Set to false to hide it (e.g. once this becomes a real production instance again).
+// IMPORTANT: keep these two values in sync with whatever AUTH_USERNAME / AUTH_PASSWORD
+// you actually set as environment variables on your Render backend.
 const SHOW_DEMO_HINT = true;
 const DEMO_USERNAME = "demo";
 const DEMO_PASSWORD = "demo123";
@@ -682,6 +686,18 @@ export default function SeatingArrangementApp() {
           <div style={s.infoBox}>
             Upload the two required Excel files before proceeding. Both files must be present to run the allocation algorithm.
           </div>
+          {SHOW_DEMO_HINT && (
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", background: "rgba(255,107,71,0.06)", border: "1px dashed #ff6b47", borderRadius: 10, padding: "10px 14px", marginBottom: 20 }}>
+              <Info size={14} color="#ff6b47" style={{ flexShrink: 0 }} />
+              <span style={{ fontSize: "0.68rem", color: "#a8a3b0" }}>New here? Try it with sample data:</span>
+              <a href="/sample_department_data.xlsx" download style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "0.68rem", color: "#ff6b47", textDecoration: "none", border: "1px solid #ff6b47", borderRadius: 999, padding: "4px 12px" }}>
+                <Download size={11} /> Department Data
+              </a>
+              <a href="/sample_room_data.xlsx" download style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: "0.68rem", color: "#ff6b47", textDecoration: "none", border: "1px solid #ff6b47", borderRadius: 999, padding: "4px 12px" }}>
+                <Download size={11} /> Room Data
+              </a>
+            </div>
+          )}
 
           {["department", "room"].map((key) => (
             <div key={key}>
