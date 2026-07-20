@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Armchair, FileSpreadsheet, GraduationCap, Lock, CheckCircle2, Building2 } from "lucide-react";
 
-// A small grid that "allocates" itself; seats light up in a wave,
-// then reset. This is the one bold/animated moment on the page; everything
-// else stays quiet and disciplined.
 function AllocationGrid() {
   const ROWS = 5;
   const COLS = 9;
