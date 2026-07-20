@@ -8,8 +8,6 @@ from itertools import combinations
 DEFAULT_MIN_SPLIT = 5
 
 app = Flask(__name__)
-# Restrict CORS to your deployed frontend once you have the Vercel URL, e.g.:
-# CORS(app, origins=[os.environ.get("FRONTEND_URL", "*")])
 CORS(app)
 
 AUTH_USERNAME = os.environ.get('AUTH_USERNAME', 'demo-user')
@@ -68,7 +66,6 @@ def allocate_semester(room_df, dept_df, MIN_SPLIT):
         orig_cap = room_capacity_map[room]
         current_avail = available[room]
 
-        # Sanity check
         actual = min(strength, current_avail)
 
         allocation.append({
