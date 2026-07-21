@@ -68,7 +68,7 @@ export default function SeatingArrangementApp() {
   const [currentStep, setCurrentStep] = useState(0);
   const [files, setFiles] = useState({ department: null, room: null });
   const [dragOver, setDragOver] = useState({ department: false, room: false });
-  const [auth, setAuth] = useState({ username: "", password: "", attempts: 0, error: "", loading: false });
+  const [auth, setAuth] = useState({ username: "", password: "", attempts: 0, error: "", loading: false, loadingMessage: "Verifying..." });
   const [authenticated, setAuthenticated] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [mode, setMode] = useState("Semester");
@@ -185,7 +185,14 @@ export default function SeatingArrangementApp() {
 
   const handleAuthenticate = async () => {
     if (auth.attempts >= 3) return;
-    setAuth((a) => ({ ...a, loading: true, error: "" }));
+    setAuth((a) => ({ ...a, loading: true, error: "", loadingMessage: "Verifying..." }));
+
+    // If the backend takes a while (e.g. Render free-tier cold start), let the
+    // user know what's happening instead of leaving the button looking frozen.
+    const slowTimer = setTimeout(() => {
+      setAuth((a) => (a.loading ? { ...a, loadingMessage: "Waking up the server, this can take up to 30s..." } : a));
+    }, 4000);
+
     try {
       const res = await fetch(`${API}/authenticate`, {
         method: "POST",
@@ -194,7 +201,7 @@ export default function SeatingArrangementApp() {
       });
       if (res.ok) {
         setAuthenticated(true);
-        setAuth((a) => ({ ...a, loading: false, error: "" }));
+        setAuth((a) => ({ ...a, loading: false, error: "", loadingMessage: "Verifying..." }));
         toast.success("Authentication successful");
         setTimeout(() => {
         setCurrentStep(1);
@@ -204,14 +211,16 @@ export default function SeatingArrangementApp() {
         const msg = attempts >= 3
           ? "Access Denied. Maximum attempts reached."
           : `Invalid credentials. ${3 - attempts} attempt(s) remaining.`;
-        setAuth((a) => ({ ...a, loading: false, attempts, error: msg }));
+        setAuth((a) => ({ ...a, loading: false, attempts, error: msg, loadingMessage: "Verifying..." }));
         toast.error(msg);
       }
     } catch (err) {
       const msg = "Cannot connect to server. Ensure Flask is running on port 5000.";
-      setAuth((a) => ({ ...a, loading: false, error: msg }));
+      setAuth((a) => ({ ...a, loading: false, error: msg, loadingMessage: "Verifying..." }));
       toast.error(msg);
       if (err instanceof TypeError) setServerDown(true);
+    } finally {
+      clearTimeout(slowTimer);
     }
   };
 
@@ -322,7 +331,7 @@ export default function SeatingArrangementApp() {
   const handleLogout = () => {
     setAuthenticated(false);
     setCurrentStep(0);
-    setAuth({ username: "", password: "", attempts: 0, error: "", loading: false });
+    setAuth({ username: "", password: "", attempts: 0, error: "", loading: false, loadingMessage: "Verifying..." });
     setFiles({ department: null, room: null });
     setResults(null);
     setShowPreview(false);
@@ -672,7 +681,7 @@ export default function SeatingArrangementApp() {
             onClick={handleAuthenticate}
           >
             {auth.loading && <Spinner reducedMotion={reducedMotion} />}
-            {auth.loading ? "Verifying..." : "Authenticate"}
+            {auth.loading ? auth.loadingMessage : "Authenticate"}
           </button>
           <button style={s.forgotLink} onClick={handleForgotPassword}>Forgot Password?</button>
         </motion.div>
